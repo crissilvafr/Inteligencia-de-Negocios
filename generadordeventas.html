@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de ventas</title>
+    <script>
+        var salida = "";
+        var productos = [
+            ["1", "Cafe", "20"],
+            ["2", "Té", "15"],
+            ["3", "Galletas", "10"],
+            ["4", "Refresco", "25"],
+            ["5", "Sandwich", "35"],
+            ["6", "Agua", "5"],
+            ["7", "Pastel", "50"],
+            ["8", "Helado", "30"],
+            ["9", "Pizza", "40"],
+            ["10", "Donas", "12"],
+            ["11", "Frutas", "18"],
+            ["12", "Hamburguesa", "45"],
+            ["13", "Sopa", "22"],
+            ["14", "Ensalada", "28"],
+            ["15", "Papas fritas", "8"],
+            ["16", "Pollo asado", "50"],
+            ["17", "Cerveza", "40"],
+            ["18", "Vino tinto", "55"],
+            ["19", "Tacos", "25"],
+            ["20", "Sushi", "60"],
+            ["21", "Pasta", "32"],
+            ["22", "Pan", "5"],
+            ["23", "Jugo", "12"],
+            ["24", "Yogur", "15"],
+            ["25", "Chips", "7"],
+            ["26", "Cereal", "18"],
+            ["27", "Sopa instantánea", "9"],
+            ["28", "Chocolate", "20"],
+            ["29", "Cupcake", "14"],
+            ["30", "Camarones", "65"],
+            ["31", "Helado de vainilla", "28"],
+            ["32", "Sándwich de pollo", "38"],
+            ["33", "Café con leche", "25"],
+            ["34", "Galletas de chocolate", "12"],
+            ["35", "Pizza de pepperoni", "42"],
+            ["36", "Té verde", "18"],
+            ["37", "Ensalada César", "30"],
+            ["38", "Tostadas", "8"],
+            ["39", "Burrito", "55"],
+            ["40", "Sopa de lentejas", "20"],
+            ["41", "Soda", "5"],
+            ["42", "Huevo", "2"],
+            ["43", "Croissant", "10"],
+            ["44", "Sushi de salmón", "65"],
+            ["45", "Malteada", "28"],
+            ["46", "Tarta de manzana", "35"],
+            ["47", "Café helado", "30"],
+            ["48", "Galletas de avena", "12"],
+            ["49", "Torta de chocolate", "50"],
+            ["50", "Manzana", "3"]
+        ];
+        function generarFecha() {
+            return (new Date(new Date(2000, 1, 1).getTime() + Math.random() * (new Date().getTime() - new Date(2000, 1, 1).getTime()))).toISOString().split("T")[0];
+        }
+
+        function generarHora() {
+            return (new Date(new Date(2000, 1, 1).getTime() + Math.random() * (new Date().getTime() - new Date(2000, 1, 1).getTime()))).toISOString().split("T")[1].substring(0, 8)/*.split(".")[0]*/;
+        }
+
+        function getRandomNumber() {
+            return Math.floor(Math.random() * 10) + 1;
+        }
+
+        function generar() {
+
+            salida = `CREATE DATABASE IF NOT EXISTS POS;<br> USE POS;<br>CREATE TABLE IF NOT EXISTS ventas(id INT(10) NOT NULL UNIQUE, fecha DATE NOT NULL, hora TIME NOT NULL);<br> INSERT INTO ventas VALUES`;
+            for (var i = 1; i < 10001; i++) {
+
+                if (i == 10001 - 1) salida += "('" + i + "', '" + generarFecha() + "', '" + generarHora() + "');<br>";
+                else salida += "('" + i + "', '" + generarFecha() + "', '" + generarHora() + "'),<br>";
+            }
+
+            salida += `CREATE TABLE IF NOT EXISTS ventas_detalle(id INT(10) NOT NULL, producto_id INT(10), nombre_producto VARCHAR(255), precio DECIMAL NOT NULL);<br> INSERT INTO ventas_detalle VALUES<br>`;
+            for(var i = 1; i < 10001; i++){
+                var num = getRandomNumber();
+                for(var j = 1; j < num+1; j++ ){
+                    var producto = productos[Math.floor(Math.random() * productos.length)];
+                    salida += "('" + i + "', '" + producto[0] + "', '" + producto[1]  + "', '" + producto[2] +"'),<br>";
+                }
+                
+            }
+            document.getElementById('salida').innerHTML = salida.slice(0, -6)+ ");";
+        }
+
+
+        function generarArchivo() {
+            //alert("Generando archivo SQL...");
+            var file = document.createElement('a');
+            var query = salida.slice(0, -6)+ ");";
+            var sql = query.replace(/<br>/g, '\n').trim();
+            file.setAttribute('href', 'data:text/plane;charset=utf-8,' + encodeURIComponent(sql));
+            file.setAttribute('download', 'sistema_pos.sql');
+            file.style.display = 'none';
+            document.body.appendChild(file);
+            file.click();
+            document.body.removeChild(file);
+        }
+    </script>
+</head>
+
+<body style="font-family: sans-serif; line-height: 1.5;">
+    <h1>Generador aleatorio de ventas</h1>
+    <input type="button" value="Generar Datos" onclick="generar()">
+    <input type="button" value="Generar archivo SQL" onclick="generarArchivo()">
+    <p id="salida"></p>
+</body>
+</html>

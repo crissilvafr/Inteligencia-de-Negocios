@@ -1,0 +1,15 @@
+1.SELECT COUNT(*) AS total_ventas FROM ventas;
+2.SELECT fecha, hora FROM ventas ORDER BY fecha ASC LIMIT 1;
+3.SELECT fecha, hora FROM ventas ORDER BY fecha DESC LIMIT 1;
+4.SELECT COUNT(*) AS total_elementos FROM ventas_detalle;
+5. SELECT nombre_producto, COUNT(*) AS repeticiones FROM ventas_detalle GROUP BY nombre_producto;
+6.SELECT nombre_producto, COUNT(*) AS repeticiones FROM ventas_detalle GROUP BY nombre_producto ORDER BY repeticiones ASC LIMIT 1;
+7.SELECT nombre_producto, COUNT(*) AS repeticiones FROM ventas_detalle GROUP BY nombre_producto ORDER BY repeticiones DESC LIMIT 1;
+8.
+9.SELECT ventas.id, ventas.fecha, ventas.hora, SUM(precio) AS total FROM ventas_detalle INNER JOIN ventas WHERE ventas_detalle.id = ventas.id GROUP BY ventas_detalle.id;
+10.
+11.
+12.
+13.
+14.
+15.

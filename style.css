@@ -1,0 +1,8 @@
+body{
+    margin: 0px;
+    padding: 0%;
+    background-image: url("spheres.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
